@@ -5,9 +5,15 @@ const { createApp } = Vue
       return {
         message: 'Hello Vue!',
         emailList: [],
-        temporaryArray: []
+        temporaryArray: [],
       }
     },
+    mounted() {
+      for (let i = 0; i < 10; i++) {
+        this.getEmail()
+      }
+    },
+
     methods: {
       getEmail() {
         axios
@@ -15,17 +21,15 @@ const { createApp } = Vue
           .then((res) => {
             console.log(res.data.response)
             this.temporaryArray.push(res.data.response)
-          }) 
-      }
-    },
-    mounted() {
-      for (let i = 0; i < 10; i++) {
-        this.getEmail()
-      }
-      setTimeout(() => {
+            if (this.temporaryArray.length === 10) {
+              this.pushResults()
+            }
+          })
+      },
+      pushResults() {
         for (let i = 0; i < this.temporaryArray.length; i++) {
           this.emailList.push(this.temporaryArray[i])
         }
-      }, 1000)
-    }
+      }
+    },
   }).mount('#app')
